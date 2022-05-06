@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+sample_trajectories/
+
 # Distribution / packaging
 .Python
 build/
