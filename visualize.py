@@ -5,6 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import glob
+import numpy as np
+import seaborn
 
 bounding_box = {
     "x1": 116.21200561523438,
@@ -50,11 +52,26 @@ def main():
 
     new_df.to_csv(r'test_data_filtered.csv', index=False)
 
-    print(len(df), len(new_df))
+    # put_df_on_plot(new_df)
+    heatmap(new_df)
+
 
 
 def put_df_on_plot(df):
     plt.scatter(x=df['long'], y=df['lat'], color="red", s=.3**2)
+
+
+def heatmap(df):
+    H = plt.hist2d(df['long'], df['lat'], bins=280)[0]
+    plt.close()
+    fig = plt.figure(figsize=(50, 50))
+    H = np.ma.masked_where(H == 0, H)
+    cmap = plt.get_cmap('cool')
+    cmap.set_bad(color='black')
+    plt.imshow(H, cmap=cmap)
+    plt.ylim(279, 0)
+    plt.show()
+
 
 
 main()
