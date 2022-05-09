@@ -63,13 +63,13 @@ def put_df_on_plot(df):
 
 def heatmap(df):
     H = plt.hist2d(df['long'], df['lat'], bins=280)[0]
+    H = np.flip(H.T, 0)
     plt.close()
     fig = plt.figure(figsize=(50, 50))
     H = np.ma.masked_where(H == 0, H)
     cmap = plt.get_cmap('cool')
     cmap.set_bad(color='black')
     plt.imshow(H, cmap=cmap)
-    plt.ylim(279, 0)
     plt.show()
 
 
