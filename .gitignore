@@ -129,3 +129,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+test_data.csv
+test_data.rar
+.idea
