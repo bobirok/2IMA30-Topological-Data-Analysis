@@ -7,6 +7,8 @@ __pycache__/
 *.so
 
 sample_trajectories/
+test_data.csv
+Data/
 
 # Distribution / packaging
 .Python
