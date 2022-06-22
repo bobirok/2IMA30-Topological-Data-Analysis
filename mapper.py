@@ -11,11 +11,11 @@ data = df.drop(columns=["timestamp"]).to_numpy()
 mapper = km.KeplerMapper(verbose=2)
 
 # Fit to and transform the data
-projected_data = mapper.fit_transform(data, projection=[2])
+projected_data = mapper.fit_transform(data, projection=[0,1])
 
 
 clusterer = sklearn.cluster.DBSCAN(eps=0.3, min_samples=5)
-cover = km.Cover(n_cubes=20, perc_overlap=0.3)
+cover = km.Cover(n_cubes=3, perc_overlap=0.3)
 
 # Create dictionary called 'graph' with nodes, edges and meta-information
 graph = mapper.map(projected_data, data, cover=cover, clusterer=clusterer)
