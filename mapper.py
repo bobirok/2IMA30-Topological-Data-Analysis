@@ -2,6 +2,7 @@ import os
 import kmapper as km
 import pandas as pd
 import sklearn
+from sklearn import datasets
 import haversine as hs
 from datetime import datetime
 import numpy as np
@@ -51,39 +52,40 @@ def create_lenses(df):
 
 data_path = "lens_data.csv"
 if os.path.exists(data_path):
-    data = np.genfromtxt(data_path, delimiter=',')
+    data = np.genfromtxt(data_path, delimiter=',') #, dtype=None
 else:
     print('load has failed')
     data = pd.read_csv("test_data_filtered.csv")
     data = create_lenses(data)
     np.savetxt(data_path, data,  fmt="%s, %s, %s, %s", delimiter=",")
 
-print(data)
-
-lens1 = data[:, [1, 2]]
+print(data[0:5])
+#
+# lens1 = data[:, [1, 2]]
 data_names = data[:, 3]
-data = data[:, [0, 1, 2]]
+# data = data[:, [0, 1, 2]]
 
-print(lens1)
-print(data)
+# print(lens1)
 
+test_data = data[:, [1,2]]
+test_data = test_data[~np.isnan(test_data).any(axis=1), :]
 
 # Initialize
 mapper = km.KeplerMapper(verbose=2)
-lens2 = mapper.fit_transform(data, projection="l2norm")
+lens2 = mapper.fit_transform(test_data, projection=[0,1])
 
 # Fit to and transform the data
 #projected_data = mapper.fit_transform(data, projection=[0,1])
-lens = np.c_[lens1, lens2]
+# lens = np.c_[lens1, lens2]
 
 #clusterer = sklearn.cluster.DBSCAN(eps=1000000, min_samples=1)
 clusterer=sklearn.cluster.KMeans(n_clusters=2,random_state=3471)
 cover = km.Cover(n_cubes=15, perc_overlap=0.7)
 
 # Create dictionary called 'graph' with nodes, edges and meta-information
-graph = mapper.map(lens, data, cover=cover, clusterer=clusterer)
+graph = mapper.map(lens2, test_data, cover=cover, clusterer=clusterer)
 
-labels = data[:, 2]
+labels = test_data[:, 1]
 print(graph)
 # Visualize it
 mapper.visualize(graph, path_html="make_circles_keplermapper_output.html",
